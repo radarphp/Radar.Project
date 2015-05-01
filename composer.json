@@ -11,5 +11,6 @@
         "psr-4": {
             "Example\\": "src/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
