@@ -1,0 +1,15 @@
+{
+    "name": "radar/project",
+    "type": "project",
+    "description": "An Action-Domain-Responder project skeleton.",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.5.0",
+        "radar/adr": "1.x-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Example\\": "src/"
+        }
+    }
+}
