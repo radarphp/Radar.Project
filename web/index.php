@@ -9,4 +9,6 @@ $adr = (new \Radar\Adr\Factory($env))->newInstance([
 $adr->get('Example\Hello', '/{name}?', 'Example\Hello\Domain')
     ->defaults(['name' => 'world']);
 
+$adr->get('Example\Foo', '/foo/{bar}', 'Example\Foo\Domain');
+
 $adr();

@@ -1,5 +1,7 @@
 # Radar
 
+**WARNING: This project is under heavy development.**
+
 Radar is an [Action-Domain-Responder](http://pmjones.io/adr) foundation for PHP.
 
 To install:
@@ -49,4 +51,4 @@ class Domain
 ?>
 ```
 
-Browse to <Browse to <http://localhost:8080/foo/zim> and see JSON output.
+Then browse to <http://localhost:8080/foo/zim> and see JSON output.
