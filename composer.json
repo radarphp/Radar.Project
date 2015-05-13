@@ -12,5 +12,10 @@
             "Example\\": "src/"
         }
     },
+    "scripts": {
+        "post-create-project-cmd" : [
+            "php --run \"copy('_env', '.env');\""
+        ]
+    },
     "minimum-stability": "dev"
 }
