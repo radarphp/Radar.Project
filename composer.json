@@ -14,7 +14,7 @@
     },
     "scripts": {
         "post-create-project-cmd" : [
-            "php --run \"copy('_env', '.env');\""
+            "php --run \"touch('.env');\""
         ]
     },
     "minimum-stability": "dev"
