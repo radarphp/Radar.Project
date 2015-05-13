@@ -1,54 +1,32 @@
 # Radar
 
-**WARNING: This project is under heavy development.**
+Radar is a PSR-7 compliant an [Action-Domain-Responder](http://pmjones.io/adr)
+(ADR) system. While it may look like a micro-framework, it is more like a
+wrapper around the real core of your application domain.
 
-Radar is an [Action-Domain-Responder](http://pmjones.io/adr) foundation for PHP.
+## Installing Radar
 
-To install:
+You will need [Composer](https://getcomposer.org) to install Radar.
 
-    composer create-project -s dev radar/project project-name
-    cd project-name
-    cp _env .env
+Pick a project name, and use Composer to create it with Radar; here we create
+one called `example-project`:
+
+    composer create-project -s dev radar/project example-project
+
+Confirm the installation by changing into the project directory and starting the
+built-in PHP web server:
+
+    cd example-project
     php -S localhost:8080 -t web/
 
-You can then browse to <http://localhost:8080/> and see JSON output.
+You can then browse to <http://localhost:8080/> and see JSON output:
 
-Browse to <http://localhost:8080/your-name> and see modified JSON output.
+    {"phrase":"Hello world"}
 
-Adding a route in `web/index.php` takes three pieces of information:
+You can also browse to <http://localhost:8080/your-name> and see modified JSON output:
 
-1. a route name, which doubles as a class name prefix for optional _Input_
-and _Responder_ classes,
+    {"phrase":"Hello your-name"}
 
-2. a path with optional placeholder tokens, and
+## Documentation
 
-3. a callable _Domain_ class.
-
-For example, in `web/index.php`:
-
-    $adr->get('Example\Foo', '/foo/{bar}', 'Example\Foo\Domain')
-
-Then add, in a `src/Foo` directory:
-
-```php
-<?php
-namespace Example\Foo;
-
-use Aura\Payload\Payload;
-
-class Domain
-{
-    public function __invoke(array $input)
-    {
-        $payload = new Payload();
-        return $payload
-            ->setStatus(Payload::FOUND)
-            ->setOutput([
-                'bar' => $input['bar']
-            ]);
-    }
-}
-?>
-```
-
-Then browse to <http://localhost:8080/foo/zim> and see JSON output.
+You can read the documentation [here](docs/index.md).
