@@ -4,11 +4,16 @@ namespace Radar\Adr;
 require '../vendor/autoload.php';
 
 $boot = new Boot(dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env');
-$adr = $boot([
-    'Example\Config'
-]);
+$adr = $boot();
 
-$adr->get('Example\Hello', '/{name}?', 'Example\Hello\Domain')
+$adr->get('Hello', '/{name}?', function (array $input) {
+        $payload = new \Aura\Payload\Payload();
+        return $payload
+            ->setStatus($payload::SUCCESS)
+            ->setOutput([
+                'phrase' => 'Hello ' . $input['name']
+            ]);
+    })
     ->defaults(['name' => 'world']);
 
 $adr();
