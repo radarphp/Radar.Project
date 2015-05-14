@@ -14,23 +14,23 @@ Sending handlers), etc.
 
 - The run phase:
 
-    - All "before" middleware callables are invoked in order; this is where the
-    _Request_ is modified as needed. (If a "before" middleware returns a
-    _Response_, that skips the process ahead to the "send" phase.)
+    - All "before" middleware callables are invoked. If a "before"
+    middleware returns a _Response_, that skips the process ahead to the
+    "send" phase.)
 
     - The "routing" phase to determine the _Route_ based on the _Request_.
 
     - The "action" phase to use the _Route_ for:
 
-        - An _Input_ callable (either a class or closure) is invoked to examine the
-        incoming HTTP _ServerRequest_ message and extract values to pass along to the
-        core _Domain_ callable.
+        - An _Input_ callable (either a class or closure) is invoked to
+        examine the incoming HTTP _ServerRequest_ message and extract values
+        to pass along to the core _Domain_ callable.
 
-        - A _Domain_ callable is invoked using those values, and a _Payload_ or other
-        output from the _Domain_ is received in return.
+        - A _Domain_ callable is invoked using those values, and a _Payload_
+        from the _Domain_ is received in return.
 
-        - A _Responder_ callable is invoked with the _Domain_ output; the _Responder_
-        then builds the outgoing HTTP _Response_ message.
+        - A _Responder_ callable is invoked with the _Domain_ output; the
+        _Responder_ then builds the outgoing HTTP _Response_ message.
 
     - All "after" middleware callables are invoked
 
