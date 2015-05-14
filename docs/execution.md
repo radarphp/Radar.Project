@@ -14,9 +14,9 @@ Sending handlers), etc.
 
 - The run phase:
 
-    - All "before" middleware callables are invoked in order; this is where the _Request_
-    is modified as needed. (If a "before" middleware returns a _Response_, that
-    skips the process ahead to the "send" phase.)
+    - All "before" middleware callables are invoked in order; this is where the
+    _Request_ is modified as needed. (If a "before" middleware returns a
+    _Response_, that skips the process ahead to the "send" phase.)
 
     - The "routing" phase to determine the _Route_ based on the _Request_.
 

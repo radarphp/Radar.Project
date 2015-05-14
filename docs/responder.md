@@ -1,3 +1,0 @@
-# Responder
-
-TBD.
