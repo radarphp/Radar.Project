@@ -1,7 +1,7 @@
 <?php
 namespace Radar\Adr;
 
-require '../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $boot = new Boot(dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env');
 $adr = $boot();

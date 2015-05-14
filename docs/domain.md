@@ -23,7 +23,7 @@ CLI layer. Everything it needs should be injected from the outside, either at
 construction time or through a method call. For example, no superglobal should
 ever appear in an _ApplicationService_ (or anywhere else in the _Domain_
 either). This is to make sure the _ApplicationService_, and by extension the
-_Domain_ as a whole, is indepedent from any particular user interface system.
+_Domain_ as a whole, is independent from any particular user interface system.
 
 Each _ApplicationService_ should be as narrowly-purposed as possible, handling
 either a single activity, or a limited set of related activities.
