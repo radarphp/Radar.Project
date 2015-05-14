@@ -112,12 +112,12 @@ Of note, the `web/index.php` file is where you will:
 
 ## Setting A Project Namespace
 
-By default, `composer.json` autoloads any unknown PSR-4 namespace name from the
-`src/` directory. This means that you can create any PSR-4 style class structure
-in the `src/` directory for your project.
+In a Radar project, by default, Composer autoloads any unknown PSR-4 namespace
+name from the `src/` directory. This means that you can create any PSR-4 style
+class structure in the `src/` directory for your Radar project.
 
-If you want to define a specific autoloaded namespace name for your project,
-modify `composer.json` so that name points to the `src/` directory ...
+If you want to define a specific namespace for your project, modify
+`composer.json` so that namespace points to the `src/` directory ...
 
     "autoload": {
         "psr-4": {
