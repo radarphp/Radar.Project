@@ -22,3 +22,8 @@ appropriate method on the `$adr` object in `web/index.php`:
 
 The internal dependency injection container will create an instance of the
 specified class and `__invoke()` it at the appropriate time.
+
+### Navigation
+
+* Continue to [Execution Path](/docs/execution.md)
+* Back to [Container Configuration](/docs/container.md)
