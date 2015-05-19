@@ -162,3 +162,8 @@ so all the _Map_ methods are also available on the `$adr` object for defining
 your routes. Please see the Aura.Router
 [Map](https://github.com/auraphp/Aura.Router/blob/3.x/docs/index.md)
 documentation for more information.
+
+### Navigation
+
+* Continue to [Middleware](/docs/middleware.md)
+* Back to [Domain Design](/docs/domain.md)

@@ -9,3 +9,7 @@ The Radar boot logic uses the
 library for the environment loading; please consult the documentation there
 for more information.
 
+### Navigation
+
+* Continue to [Container Configuration](/docs/container.md)
+* Back to [Middleware](/docs/middleware.md)
