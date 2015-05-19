@@ -1,6 +1,6 @@
 # Radar
 
-Radar is a PSR-7 compliant an [Action-Domain-Responder](http://pmjones.io/adr)
+Radar is a PSR-7 compliant [Action-Domain-Responder](http://pmjones.io/adr)
 (ADR) system. While it may look like a micro-framework, it is more like a
 wrapper around the real core of your application domain.
 
