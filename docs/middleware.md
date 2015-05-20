@@ -18,7 +18,7 @@ A middleware callable must have the following signature:
 
 ```php
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\RespponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 function (ServerRequestInterface $request, ResponseInterface $response) { ... }
 ```
@@ -57,7 +57,7 @@ For example:
 
 ```php
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\RespponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class MyMiddleware
 {
