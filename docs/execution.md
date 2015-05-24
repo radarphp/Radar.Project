@@ -2,7 +2,7 @@
 
 The full execution process in Radar looks like this:
 
-    Boot -> Setup -> Run -> Before [-> Routing -> Action -> After] -> Send -> Finish
+    Boot -> Setup -> Run -> Middleware
 
 Point by point:
 
@@ -12,32 +12,29 @@ Point by point:
 elements, add middleware callables, define custom Action/Routing/Exception/
 Sending handlers), etc.
 
-- The run phase:
+- The run phase, which executes all middleware callables in turn.
 
-    - All "before" middleware callables are invoked. If a "before"
-    middleware returns a _Response_, that skips the process ahead to the
-    "send" phase.)
+The initial installation middleware queue runs three handlers:
 
-    - The "routing" phase to determine the _Route_ based on the _Request_.
+- a _RoutingHandler to determine the _Route_ based on the _ServerRequest_,
 
-    - The "action" phase to use the _Route_ for:
+- an _ActionHandler_ to use the _Route_ for the action-domain-responder activity:
 
-        - An _Input_ callable (either a class or closure) is invoked to
-        examine the incoming HTTP _ServerRequest_ message and extract values
-        to pass along to the core _Domain_ callable.
+    - An _Input_ callable is invoked to examine the incoming HTTP
+    _ServerRequest_ message and extract values to pass along to the core
+    _Domain_ callable.
 
-        - A _Domain_ callable is invoked using those values, and a _Payload_
-        from the _Domain_ is received in return.
+    - A _Domain_ callable is invoked using those values, and a _Payload_
+    from the _Domain_ is received in return.
 
-        - A _Responder_ callable is invoked with the _Domain_ output; the
-        _Responder_ then builds the outgoing HTTP _Response_ message.
+    - A _Responder_ callable is invoked with the _Domain_ output; the
+    _Responder_ then builds the outgoing HTTP _Response_ message.
 
-    - All "after" middleware callables are invoked
+- a _SendingHandler_ to send the _Response_
 
-    - The "sending" phase, where _Response_ is sent back
-
-    - All "finish" middleware callables are invoked
+You can prepend, append, or replace these handlers with your own middleware.
 
 ### Navigation
 
-* Back to [Index](/docs/index.md)
+* Back to [Container Configuration](/docs/container.md)
+* Up to [Index](/docs/index.md)

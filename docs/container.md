@@ -26,5 +26,5 @@ own configuration class, be sure to include that class name in the list.
 
 ### Navigation
 
-* Continue to [Alternative Handlers](/docs/handlers.md)
+* Continue to [Execution Path](/docs/execution.md)
 * Back to [Environment Variables](/docs/environment.md)

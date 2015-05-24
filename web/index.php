@@ -1,23 +1,23 @@
 <?php
-namespace Radar\Adr;
-
-use Zend\Diactoros\ServerRequestFactory;
-use Zend\Diactoros\Response;
-
+/**
+ * Bootstrapping
+ */
 require '../vendor/autoload.php';
-
-// boot
-$boot = new Boot(dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env');
+$boot = new Radar\Adr\Boot(dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env');
 $adr = $boot->adr();
 
-// middleware
+/**
+ * Middleware handlers
+ */
 $adr->middle('Radar\Adr\Handler\RoutingHandler');
 $adr->middle('Radar\Adr\Handler\ActionHandler');
 $adr->middle('Radar\Adr\Handler\SendingHandler');
 
-// routing
+/**
+ * Routes
+ */
 $adr->get('Hello', '/{name}?', function (array $input) {
-        $payload = new \Aura\Payload\Payload();
+        $payload = new Aura\Payload\Payload();
         return $payload
             ->setStatus($payload::SUCCESS)
             ->setOutput([
@@ -26,8 +26,10 @@ $adr->get('Hello', '/{name}?', function (array $input) {
     })
     ->defaults(['name' => 'world']);
 
-// run
+/**
+ * Run
+ */
 $adr->run(
-    ServerRequestFactory::fromGlobals(),
-    new Response()
+    Zend\Diactoros\ServerRequestFactory::fromGlobals(),
+    new Zend\Diactoros\Response()
 );
