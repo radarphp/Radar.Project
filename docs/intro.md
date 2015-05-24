@@ -27,8 +27,8 @@ connecting the Domain and Responder.
 
 ## How Does Radar Work?
 
-Radar is superficially similar to a micro-framework. It has a routing
-system to point URLs to actions, a chain-style middleware system to modify the
+Radar is superficially similar to a micro-framework. It has a routing system to
+point URLs to actions, a wrapper- or chain-style middleware system to modify the
 incoming HTTP request and outgoing HTTP response, and a dependency injection
 container and configuration system to wire everything together.
 

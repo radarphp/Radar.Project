@@ -4,8 +4,8 @@ Radar uses chain- or wrapper-style middleware for all _ServerRequest_ and
 _Response_ processing. A middleware callable must have the following signature:
 
 ```php
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\RespponseInterface;
 
 function (
     ServerRequestInterface $request, // the incoming request
@@ -31,7 +31,7 @@ and call its `__invoke()` method.
 $adr->middle('My\Middleware\Handler');
 ```
 
- Alternatively, pass an array of the form `['ClassName', 'method']`. Un this
+ Alternatively, pass an array of the form `['ClassName', 'method']`. In this
 case, the underlying dependency injection container will create an instance of
 that class and call the specified method.
 
@@ -47,7 +47,7 @@ Your middleware logic should follow this pattern:
 - Optionally invoke the next handler with the _ServerRequest_ and
   _Response_, receiving a new _Response_ in return.
 
-- Optionally returned _Response_ as desired.
+- Optionally modify the returned _Response_ as desired.
 
 - Return the _Response_ to the previous handler.
 
@@ -57,8 +57,8 @@ various optional processes:
 ```php
 namespace My\Middleware;
 
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\RespponseInterface;
 
 class Handler
 {
@@ -89,10 +89,14 @@ class Handler
 
 > N.b.: You should **always** return the _Response_ from your middleware logic.
 
-Note that this logic chain means the _ServerRequest_ and _Response_ are
-subjected to two passes through each middleware handler: once on the way "in"
-through each handler via the `$next` invocation, and again on their way "out"
-from each handler via the `return` to the previous handler.
+Remember that the _ServerRequest_ and _Response_ are **immutable**. Implicit in that is the fact that changes to the _ServerRequest_ are always transmitted to the `$next` handler but never to the
+previous one.
+
+Note also that this logic chain means the _ServerRequest_ and _Response_ are
+subjected to two passes through each middleware handler:
+
+- first on the way "in" through each handler via the `$next` handler invocation,
+- then on the way "out" from each handler via the `return` to the previous handler.
 
 For example, if the middleware queue looks like this:
 
@@ -144,8 +148,8 @@ The exception handler must match this signature:
 
 ```php
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\RespponseInterface;
 
 function (
     ServerRequestInterface $request, // the incoming request
@@ -165,8 +169,8 @@ middleware logic.
 You are going to be very tempted to place domain-related activity in your
 middleware, things like "checking to see if a user is authenticated" and so on.
 Resist this temptation. Middleware should only be about inspecting and modifying
-the request and response, *not* about handling domain elements. It is not part
-of your core application; it is part of the HTTP user interface to that
+the request and response, *not* about handling domain elements. Middleware is
+not part of your core application; it is part of the HTTP user interface to that
 application.
 
 One shorthand way of determining if you are doing domain work is this: if you

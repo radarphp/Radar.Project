@@ -14,11 +14,11 @@ Sending handlers), etc.
 
 - The run phase, which executes all middleware callables in turn.
 
-The initial installation middleware queue runs three handlers:
+The initial `web/index.php` installation runs three middleware handlers:
 
-- a _RoutingHandler to determine the _Route_ based on the _ServerRequest_,
+- _Radar\Adr\Handler\RoutingHandler_ to determine the _Route_ based on the _ServerRequest_,
 
-- an _ActionHandler_ to use the _Route_ for the action-domain-responder activity:
+- _Radar\Adr\Handler\ActionHandler_ to use the _Route_ for the action-domain-responder activity:
 
     - An _Input_ callable is invoked to examine the incoming HTTP
     _ServerRequest_ message and extract values to pass along to the core
@@ -30,9 +30,9 @@ The initial installation middleware queue runs three handlers:
     - A _Responder_ callable is invoked with the _Domain_ output; the
     _Responder_ then builds the outgoing HTTP _Response_ message.
 
-- a _SendingHandler_ to send the _Response_
+- _Radar\Adr\Handler\SendingHandler_ to send the _Response_
 
-You can prepend, append, or replace these handlers with your own middleware.
+You can prepend, append, or replace these handlers in `web/index.php` with your own middleware.
 
 ### Navigation
 
