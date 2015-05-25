@@ -27,8 +27,8 @@ connecting the Domain and Responder.
 
 ## How Does Radar Work?
 
-Radar is superficially similar to a micro-framework. It has a routing
-system to point URLs to actions, a filter-style middleware system to modify the
+Radar is superficially similar to a micro-framework. It has a routing system to
+point URLs to actions, a wrapper- or chain-style middleware system to modify the
 incoming HTTP request and outgoing HTTP response, and a dependency injection
 container and configuration system to wire everything together.
 
@@ -52,7 +52,7 @@ The default Radar _Responder_ expects a
 it delivers JSON output and sets proper HTTP status codes for a wide range of
 scenarios.
 
-These three callabled are invoked within a standardized _ActionHandler_. As a
+These three callables are invoked within a standardized _ActionHandler_. As a
 result, the Action logic in Radar is always the same for every route. The only
 variations are in how input is collected, how output is presented, and of course
 in how your core application domain operates.
@@ -108,7 +108,7 @@ Of note, the `web/index.php` file is where you will:
 
 - Boostrap the Radar `$adr` instance
 - Define routes
-- Specify "before", "after", and "finish" middleware callables
+- Define the middleware queue
 
 ## Setting A Project Namespace
 

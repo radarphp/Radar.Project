@@ -1,106 +1,176 @@
 # Middleware
 
-Radar honors filter-style middleware at three points in the execution path:
+Radar uses chain- or wrapper-style middleware for all _ServerRequest_ and
+_Response_ processing. A middleware callable must have the following signature:
 
-- "before", prior to the routing-and-action phase (this is generally
-to modify the inbound request in some way)
+```php
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
-- "after", once the action is complete but before the response is sent (this is
-generally to modify the outbound response in some way)
-
-- "finish", after the response is sent (this is generally for cleanup tasks)
+function (
+    ServerRequestInterface $request, // the incoming request
+    ResponseInterface $response,     // the outgoing response
+    callable $next                   // the next middleware handler
+) {
+    // ...
+}
+```
 
 > N.b.: There is no "route-specific" middleware in Radar. All middleware is
 > called regardless of the routing and action results. See the "Middleware and
 > Domain Activity" section below for the rationale behind this constraint.
 
-A middleware callable must have the following signature:
-
-```php
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
-function (ServerRequestInterface $request, ResponseInterface $response) { ... }
-```
-
 ## Invoking Middleware
 
-To add middleware logic to the execution path, call one of these methods inside
-`web/index.php` as appropriate:
-
-- `$adr->before(...)` to add a "before" middleware
-- `$adr->after(...)` to add an "after" middleware
-- `$adr->finish(...)` to add a "finish" middleware
-
-Pass a class name as the only parameter to the method. The underlying
-dependency injection container will create an instance of that class and call its
-`__invoke()` method. Alternatively, pass an array of the form
-`['ClassName', 'method']`; in this case, the underlying
-dependency injection container will create an instance of that class and call
-the specified method.
-
-## Request and Response Are Immutable
-
-Remember that the _Request_ and _Response_ objects are immutable. You can work
-with them inside your middleware logic, but changes to them **will not** be
-honored by anything outside that logic.
-
-To make sure changes to the _Request_ and _Response_ are transmitted throughout
-the system, your middleware signature should use *references* to the objects,
-like so:
+To add middleware logic to the execution path, call the `$adr->middle()` method
+in `web/index.php`. Pass a class name as the only parameter to the method.The
+underlying dependency injection container will create an instance of that class
+and call its `__invoke()` method.
 
 ```php
-function (ServerRequestInterface &$request, ResponseInterface &$response) { ... }
+$adr->middle('My\Middleware\Handler');
 ```
 
-For example:
+ Alternatively, pass an array of the form `['ClassName', 'method']`. In this
+case, the underlying dependency injection container will create an instance of
+that class and call the specified method.
+
+## Middleware Logic
+
+Your middleware logic should follow this pattern:
+
+- Receive the incoming _ServerRequest_ and _Response_ objects from the previous
+  handler as parameters, along with the next handler as a callable.
+
+- Optionally modify the received _ServerRequest_ and _Response_ as desired.
+
+- Optionally invoke the next handler with the _ServerRequest_ and
+  _Response_, receiving a new _Response_ in return.
+
+- Optionally modify the returned _Response_ as desired.
+
+- Return the _Response_ to the previous handler.
+
+Here is a skeleton example; your own middleware may or may not perform the
+various optional processes:
 
 ```php
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+namespace My\Middleware;
 
-class MyMiddleware
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+class Handler
 {
     public function __invoke(
-        ServerRequestInterface &$request,
-        ResponseInterface $response
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        callable $next
     ) {
-        $request = $request->withAttribute('my-custom-attribute', 'my-value');
-    }
+        // optionally modify the incoming request
+        $request = $request->...;
 
+        // optionally skip the $next handler and return early
+        if (...) {
+            return $response;
+        }
+
+        // optionally invoke the $next handler and get back a new Response
+        $response = $next($request, $response);
+
+        // optionally modify the Response if desired
+        $response = $response->...;
+
+        // NOT OPTIONAL: return the Response to the previous handler
+        return $response;
+    }
 }
 ```
 
-That will cause the `$request` to be modified as if it were shared throughout
-the Radar system, not just a local change to an immutable instance.
+> N.b.: You should **always** return the _Response_ from your middleware logic.
 
-## Early Exit
+Remember that the _ServerRequest_ and _Response_ are **immutable**. Implicit in that is the fact that changes to the _ServerRequest_ are always transmitted to the `$next` handler but never to the
+previous one.
 
-Usually, your middleware need return nothing at all. However, if your middleware
-returns a _Response_ object, Radar will ignore the rest of the middleware in that
-phase and go on to the next phase of the execution path. The returned _Response_
-will replace of any existing _Response_ object in Radar. (You can, of course,
-return the existing _Response_ object, and that will still cause an early exit
-from the current middleware phase.)
+Note also that this logic chain means the _ServerRequest_ and _Response_ are
+subjected to two passes through each middleware handler:
 
-If a "before" middleware returns a _Response_ for an early exit, Radar will skip
-past the routing, action, and "after" middleware phases, and proceed directly to
-sending the _Response_ and the "finish" middleware phase.
+- first on the way "in" through each handler via the `$next` handler invocation,
+- then on the way "out" from each handler via the `return` to the previous handler.
 
-Early exit in the "after" stage has the same effect, but the routing and action
-will already have occurred at that point. Radar will skip forward to the sending
-and "finish" middleware phase.
+For example, if the middleware queue looks like this:
 
-Finally, early exit in the "finish" phase will have no effect other than skipping
-the remaining "finish" middleware elements.
+```
+$adr->middle('FooHandler');
+$adr->middle('BarHandler');
+$adr->middle('BazHandler');
+```
+
+... the _ServerRequest_ and _Response_ path through the handlers will look like
+this:
+
+```
+FooHandler is 1st on the way in
+    BarHandler is 2nd on the way in
+        BazHandler is 3rd on the way in, and 1st on the way out
+    BarHandler is 2nd on the way out
+FooHandler is 3rd on the way out
+```
+
+You can use this dual-pass logic in clever and perhaps unintuitive ways. For
+example, a middlware handler placed at the very start may do nothing with
+the _ServerRequest_ and call `$next` right away, but it is the handler with
+the "real" last opportunity to modify the _Response_.
+
+## Middleware Exceptions
+
+If your middleware logic fails to catch an exception, the default
+_Radar\Adr\Handler\ExceptionHandler_ will catch it automatically. The
+default _ExceptionHandler_ will:
+
+- append the _Exception_ message to the existing _Response_ body,
+- set a `500` HTTP status code,
+- immediately send the _Response_ using the _Radar\Adr\Sender_, and
+- return the sent _Response_ to the previous middleware handler.
+
+This interrupts the execution of any `$next` middleware and starts the `return`
+pass through the previous middleware handlers.
+
+You can set an exception handler of your own by calling
+`$adr->exceptionHandler()` and passing a string class name, or an array of
+string class name and string method name.
+
+```
+$adr->exceptionHandler('My\ExceptionHandler');
+```
+
+The exception handler must match this signature:
+
+```php
+use Exception;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+function (
+    ServerRequestInterface $request, // the incoming request
+    ResponseInterface $response,     // the outgoing response
+    Exception $exception             // the exception
+) {
+    // ...
+}
+```
+
+This is no opportunity to continue to a `$next` middleware handler. If doing so
+is important to you, be diligent and catch exceptions yourself inside your
+middleware logic.
 
 ## Middleware And Domain Activity
 
 You are going to be very tempted to place domain-related activity in your
 middleware, things like "checking to see if a user is authenticated" and so on.
 Resist this temptation. Middleware should only be about inspecting and modifying
-the request and response, *not* about handling domain elements. It is not part
-of your core application; it is part of the HTTP user interface to that
+the request and response, *not* about handling domain elements. Middleware is
+not part of your core application; it is part of the HTTP user interface to that
 application.
 
 One shorthand way of determining if you are doing domain work is this: if you

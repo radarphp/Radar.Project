@@ -6,5 +6,4 @@
 4. [Middleware](middleware.md)
 5. [Environment Variables](environment.md)
 6. [Container Configuration](container.md)
-7. [Alternative Handlers](handlers.md)
 8. [Execution Path](execution.md)
