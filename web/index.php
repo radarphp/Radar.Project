@@ -3,7 +3,12 @@
  * Bootstrapping
  */
 require '../vendor/autoload.php';
-$boot = new Radar\Adr\Boot(dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env');
+$boot = new Radar\Adr\Boot([
+    'filepath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env',
+    'toEnv' => true,
+    'toServer' => true,
+    'putenv' => true,
+]);
 $adr = $boot->adr();
 
 /**
