@@ -2,22 +2,30 @@
 /**
  * Bootstrapping
  */
+
+// autoloader
 require '../vendor/autoload.php';
-$boot = new Radar\Adr\Boot([
+
+// environment variables
+josegonzalez\Dotenv\Loader::load([
     'filepath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env',
+    'toEnv' => true,
 ]);
+
+// action-domain-responder object
+$boot = new Radar\Adr\Boot();
 $adr = $boot->adr();
 
 /**
- * Middleware handlers
+ * Setup
  */
+
+// middleware handlers
 $adr->middle('Radar\Adr\Handler\RoutingHandler');
 $adr->middle('Radar\Adr\Handler\ActionHandler');
 $adr->middle('Radar\Adr\Handler\SendingHandler');
 
-/**
- * Routes
- */
+// routes
 $adr->get('Hello', '/{name}?', function (array $input) {
         $payload = new Aura\Payload\Payload();
         return $payload
