@@ -36,8 +36,9 @@ and then specifying that class as part of the container configuration. For
 example, if your `web/index.php` has this setup logic ...
 
 ```
-$adr->middle('My\Middlware\FooHandler');
-$adr->middle('My\Middlware\BarHandler');
+$adr->middle('Radar\Adr\Handler\ExceptionHandler');
+$adr->middle('My\Middleware\FooHandler');
+$adr->middle('My\Middleware\BarHandler');
 $adr->middle('Radar\Adr\Handler\RoutingHandler');
 $adr->middle('Radar\Adr\Handler\ActionHandler');
 $adr->middle('Radar\Adr\Handler\SendingHandler');
@@ -63,8 +64,9 @@ class Config extends ContainerConfig
     {
         $adr = $di->get('radar/adr:adr');
 
-        $adr->middle('My\Middlware\FooHandler');
-        $adr->middle('My\Middlware\BarHandler');
+        $adr->middle('Radar\Adr\Handler\ExceptionHandler');
+        $adr->middle('My\Middleware\FooHandler');
+        $adr->middle('My\Middleware\BarHandler');
         $adr->middle('Radar\Adr\Handler\RoutingHandler');
         $adr->middle('Radar\Adr\Handler\ActionHandler');
         $adr->middle('Radar\Adr\Handler\SendingHandler');

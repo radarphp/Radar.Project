@@ -1,168 +1,33 @@
 # Middleware
 
-Radar uses chain- or wrapper-style middleware for all _ServerRequest_ and
-_Response_ processing. A middleware callable must have the following signature:
+Radar uses the [Pipeline](https://github.com/pipeline/Pipeline.Pipeline) system for dispatching middleware. You can read more about middleware there.
 
-```php
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-
-function (
-    ServerRequestInterface $request, // the incoming request
-    ResponseInterface $response,     // the outgoing response
-    callable $next                   // the next middleware handler
-) {
-    // ...
-}
-```
-
-> N.b.: There is no "route-specific" middleware in Radar. All middleware is
-> called regardless of the routing and action results. See the "Middleware and
-> Domain Activity" section below for the rationale behind this constraint.
-
-## Invoking Middleware
-
-To add middleware logic to the execution path, call the `$adr->middle()` method
-in `web/index.php`. Pass a class name as the only parameter to the method.The
-underlying dependency injection container will create an instance of that class
-and call its `__invoke()` method.
+To add Pipeline-compatible middleware logic to the execution path, call the
+`$adr->middle()` method in `web/index.php`. Pass a class name as the only
+parameter to the method.The underlying dependency injection container will
+create an instance of that class and call its `__invoke()` method.
 
 ```php
 $adr->middle('My\Middleware\Handler');
 ```
 
- Alternatively, pass an array of the form `['ClassName', 'method']`. In this
+Alternatively, pass an array of the form `['ClassName', 'method']`. In this
 case, the underlying dependency injection container will create an instance of
 that class and call the specified method.
 
-## Middleware Logic
-
-Your middleware logic should follow this pattern:
-
-- Receive the incoming _ServerRequest_ and _Response_ objects from the previous
-  handler as parameters, along with the next handler as a callable.
-
-- Optionally modify the received _ServerRequest_ and _Response_ as desired.
-
-- Optionally invoke the next handler with the _ServerRequest_ and
-  _Response_, receiving a new _Response_ in return.
-
-- Optionally modify the returned _Response_ as desired.
-
-- Return the _Response_ to the previous handler.
-
-Here is a skeleton example; your own middleware may or may not perform the
-various optional processes:
-
-```php
-namespace My\Middleware;
-
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-
-class Handler
-{
-    public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
-    ) {
-        // optionally modify the incoming request
-        $request = $request->...;
-
-        // optionally skip the $next handler and return early
-        if (...) {
-            return $response;
-        }
-
-        // optionally invoke the $next handler and get back a new Response
-        $response = $next($request, $response);
-
-        // optionally modify the Response if desired
-        $response = $response->...;
-
-        // NOT OPTIONAL: return the Response to the previous handler
-        return $response;
-    }
-}
-```
-
-> N.b.: You should **always** return the _Response_ from your middleware logic.
-
-Remember that the _ServerRequest_ and _Response_ are **immutable**. Implicit in that is the fact that changes to the _ServerRequest_ are always transmitted to the `$next` handler but never to the
-previous one.
-
-Note also that this logic chain means the _ServerRequest_ and _Response_ are
-subjected to two passes through each middleware handler:
-
-- first on the way "in" through each handler via the `$next` handler invocation,
-- then on the way "out" from each handler via the `return` to the previous handler.
-
-For example, if the middleware queue looks like this:
-
-```
-$adr->middle('FooHandler');
-$adr->middle('BarHandler');
-$adr->middle('BazHandler');
-```
-
-... the _ServerRequest_ and _Response_ path through the handlers will look like
-this:
-
-```
-FooHandler is 1st on the way in
-    BarHandler is 2nd on the way in
-        BazHandler is 3rd on the way in, and 1st on the way out
-    BarHandler is 2nd on the way out
-FooHandler is 3rd on the way out
-```
-
-You can use this dual-pass logic in clever and perhaps unintuitive ways. For
-example, a middlware handler placed at the very start may do nothing with
-the _ServerRequest_ and call `$next` right away, but it is the handler with
-the "real" last opportunity to modify the _Response_.
-
 ## Middleware Exceptions
 
-If your middleware logic fails to catch an exception, the default
+If middleware in the pipeline fails to catch an exception, the default
 _Radar\Adr\Handler\ExceptionHandler_ will catch it automatically. The
-default _ExceptionHandler_ will:
+_ExceptionHandler_ will:
 
-- append the _Exception_ message to the existing _Response_ body,
+- write the _Exception_ message to the _Response_ body,
 - set a `500` HTTP status code,
 - immediately send the _Response_ using the _Radar\Adr\Sender_, and
 - return the sent _Response_ to the previous middleware handler.
 
-This interrupts the execution of any `$next` middleware and starts the `return`
-pass through the previous middleware handlers.
+The _ExceptionHandler_ should be the first middleware in the pipeline.
 
-You can set an exception handler of your own by calling
-`$adr->exceptionHandler()` and passing a string class name, or an array of
-string class name and string method name.
-
-```
-$adr->exceptionHandler('My\ExceptionHandler');
-```
-
-The exception handler must match this signature:
-
-```php
-use Exception;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-
-function (
-    ServerRequestInterface $request, // the incoming request
-    ResponseInterface $response,     // the outgoing response
-    Exception $exception             // the exception
-) {
-    // ...
-}
-```
-
-This is no opportunity to continue to a `$next` middleware handler. If doing so
-is important to you, be diligent and catch exceptions yourself inside your
-middleware logic.
 
 ## Middleware And Domain Activity
 

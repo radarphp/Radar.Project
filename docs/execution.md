@@ -14,7 +14,9 @@ Sending handlers), etc.
 
 - The run phase, which executes all middleware callables in turn.
 
-The initial `web/index.php` installation runs three middleware handlers:
+The initial `web/index.php` installation runs four middleware handlers:
+
+- _Radar\Adr\Handler\ExceptionHandler_ as a final fallback to catch exceptions.
 
 - _Radar\Adr\Handler\RoutingHandler_ to determine the _Route_ based on the _ServerRequest_,
 
@@ -30,7 +32,7 @@ The initial `web/index.php` installation runs three middleware handlers:
     - A _Responder_ callable is invoked with the _Domain_ output; the
     _Responder_ then builds the outgoing HTTP _Response_ message.
 
-- _Radar\Adr\Handler\SendingHandler_ to send the _Response_
+- _Radar\Adr\Handler\SendingHandler_ to send the _Response_.
 
 You can prepend, append, or replace these handlers in `web/index.php` with your own middleware.
 
