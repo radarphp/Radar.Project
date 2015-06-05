@@ -20,7 +20,8 @@ $adr = $boot->adr();
  * Setup
  */
 
-// middleware handlers
+// pipeline middleware
+$adr->middle('Radar\Adr\Handler\ExceptionHandler');
 $adr->middle('Radar\Adr\Handler\RoutingHandler');
 $adr->middle('Radar\Adr\Handler\ActionHandler');
 $adr->middle('Radar\Adr\Handler\SendingHandler');
