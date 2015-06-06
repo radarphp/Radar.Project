@@ -16,9 +16,11 @@ Sending handlers), etc.
 
 The initial `web/index.php` installation runs four middleware handlers:
 
-- _Radar\Adr\Handler\ExceptionHandler_ as a final fallback to catch exceptions.
+- _Radar\Adr\Handler\SendingHandler_ to pass along the inbound request without modification, and send back the outbound response after all other middlware have processed it;
 
-- _Radar\Adr\Handler\RoutingHandler_ to determine the _Route_ based on the _ServerRequest_,
+- _Radar\Adr\Handler\ExceptionHandler_ as a final fallback to catch exceptions;
+
+- _Radar\Adr\Handler\RoutingHandler_ to determine the _Route_ based on the _ServerRequest_;
 
 - _Radar\Adr\Handler\ActionHandler_ to use the _Route_ for the action-domain-responder activity:
 
@@ -31,8 +33,6 @@ The initial `web/index.php` installation runs four middleware handlers:
 
     - A _Responder_ callable is invoked with the _Domain_ output; the
     _Responder_ then builds the outgoing HTTP _Response_ message.
-
-- _Radar\Adr\Handler\SendingHandler_ to send the _Response_.
 
 You can prepend, append, or replace these handlers in `web/index.php` with your own middleware.
 
