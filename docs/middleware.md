@@ -1,33 +1,39 @@
 # Middleware
 
-Radar uses the [Pipeline](https://github.com/pipeline/Pipeline.Pipeline) system for dispatching middleware. You can read more about middleware there.
+Radar uses the [Relay](http://relayphp.com) system for dispatching middleware.
+You can read more about middleware there.
 
-To add Pipeline-compatible middleware logic to the execution path, call the
+To add Relay-compatible middleware entries to the queue, call the
 `$adr->middle()` method in `web/index.php`. Pass a class name as the only
-parameter to the method.The underlying dependency injection container will
-create an instance of that class and call its `__invoke()` method.
+parameter to the method. The underlying dependency injection container will
+create an instance of that class so that Relay can call its `__invoke()` method.
 
 ```php
-$adr->middle('My\Middleware\Handler');
+$adr->middle('My\Middleware\ClassName');
 ```
 
-Alternatively, pass an array of the form `['ClassName', 'method']`. In this
+Alternatively, pass:
+
+- An array of the form `['ClassName', 'method']`. In this
 case, the underlying dependency injection container will create an instance of
-that class and call the specified method.
+that class and call the specified method. The method should be Relay-compatible.
 
-## Middleware Exceptions
+- A new callable object with a Relay-compatible `__invoke()` method.
 
-If middleware in the pipeline fails to catch an exception, the default
-_Radar\Adr\Handler\ExceptionHandler_ will catch it automatically. The
+- An anonymous function with a Relay-compatible signature.
+
+## Exception Handling
+
+If middleware in the queue fails to catch an exception, the default
+_Relay\Middleware\ExceptionHandler_ will catch it automatically. The
 _ExceptionHandler_ will:
 
-- write the _Exception_ message to the _Response_ body,
-- set a `500` HTTP status code,
-- immediately send the _Response_ using the _Radar\Adr\Sender_, and
-- return the sent _Response_ to the previous middleware handler.
+- write the _Exception_ message to a new _Response_ object,
+- set a `500` HTTP status code on that new _Response_,
+- return the new _Response_ to the previous middleware handler.
 
-The _ExceptionHandler_ should be the first middleware in the pipeline.
-
+The _ExceptionHandler_ should be placed after the _ResponseSender_ middleware in
+the queue, so that the _ResponseSender_ can then send the exceptional response.
 
 ## Middleware And Domain Activity
 

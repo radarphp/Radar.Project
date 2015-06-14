@@ -1,32 +1,35 @@
 <?php
+use josegonzalez\Dotenv\Loader as Dotenv;
+use Radar\Adr\Boot;
+use Relay\Middleware\ExceptionHandler;
+use Relay\Middleware\ResponseSender;
+use Zend\Diactoros\Response as Response;
+use Zend\Diactoros\ServerRequestFactory as ServerRequestFactory;
+
 /**
  * Bootstrapping
  */
-
-// autoloader
 require '../vendor/autoload.php';
 
-// environment variables
-josegonzalez\Dotenv\Loader::load([
+Dotenv::load([
     'filepath' => dirname(__DIR__) . DIRECTORY_SEPARATOR . '.env',
     'toEnv' => true,
 ]);
 
-// action-domain-responder object
-$boot = new Radar\Adr\Boot();
+$boot = new Boot();
 $adr = $boot->adr();
 
 /**
- * Setup
+ * Middleware
  */
-
-// pipeline middleware
-$adr->middle('Radar\Adr\Handler\SendingHandler');
-$adr->middle('Radar\Adr\Handler\ExceptionHandler');
+$adr->middle(new ResponseSender());
+$adr->middle(new ExceptionHandler(new Response()));
 $adr->middle('Radar\Adr\Handler\RoutingHandler');
 $adr->middle('Radar\Adr\Handler\ActionHandler');
 
-// routes
+/**
+ * Routes
+ */
 $adr->get('Hello', '/{name}?', function (array $input) {
         $payload = new Aura\Payload\Payload();
         return $payload
@@ -40,7 +43,4 @@ $adr->get('Hello', '/{name}?', function (array $input) {
 /**
  * Run
  */
-$adr->run(
-    Zend\Diactoros\ServerRequestFactory::fromGlobals(),
-    new Zend\Diactoros\Response()
-);
+$adr->run(ServerRequestFactory::fromGlobals(), new Response());

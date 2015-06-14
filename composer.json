@@ -6,6 +6,7 @@
     "require": {
         "php": ">=5.6.0",
         "radar/adr": "~1.0",
+        "relay/middleware": "~1.0",
         "josegonzalez/dotenv": "~1.0",
         "zendframework/zend-diactoros": "~1.0"
     },

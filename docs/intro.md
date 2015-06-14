@@ -108,7 +108,7 @@ Of note, the `web/index.php` file is where you will:
 
 - Boostrap the Radar `$adr` instance
 - Define routes
-- Define the middleware pipeline
+- Define the middleware queue
 
 ## Setting A Project Namespace
 

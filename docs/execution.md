@@ -14,11 +14,13 @@ Sending handlers), etc.
 
 - The run phase, which executes all middleware callables in turn.
 
-The initial `web/index.php` installation runs four middleware handlers:
+The initial `web/index.php` installation queues four middleware decorators:
 
-- _Radar\Adr\Handler\SendingHandler_ to pass along the inbound request without modification, and send back the outbound response after all other middlware have processed it;
+- _Relay\Middleware\SendingHandler_ to pass along the inbound request without
+  modification, and send back the outbound response after all other middlware
+  have processed it;
 
-- _Radar\Adr\Handler\ExceptionHandler_ as a final fallback to catch exceptions;
+- _Relay\Middleware\ExceptionHandler_ as a final fallback to catch exceptions;
 
 - _Radar\Adr\Handler\RoutingHandler_ to determine the _Route_ based on the _ServerRequest_;
 
