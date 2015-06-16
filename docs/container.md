@@ -11,15 +11,15 @@ You can learn about container configuration classes
 ## Configuration (aka "Providers")
 
 To tell the boot process which container configuration (aka "provider") classes
-to load, and in which order, pass an array of config class names to the `boot()`
-call in `web/index.php`.
+to load, and in which order, pass an array of config class names to the `Boot()`
+call in `web/index.php`. This array will automatically be merged with the default Config that comes with ADR.
 
 ```php
 $boot = new Boot();
-$adr = $boot([
+$adr = $boot->adr([
     'Foo\Bar\ContainerConfig',
     'Baz\Dib\_Config',
-    'Some\Other\ConfigClass',
+    'Some\Other\ConfigClass'
 ]);
 ```
 
@@ -35,13 +35,12 @@ moving all the middleware and route setup logic to a configuration class,
 and then specifying that class as part of the container configuration. For
 example, if your `web/index.php` has this setup logic ...
 
-```
+```php
 $adr->middle('Radar\Adr\Handler\ExceptionHandler');
-$adr->middle('My\Middleware\FooHandler');
 $adr->middle('My\Middleware\BarHandler');
 $adr->middle('Radar\Adr\Handler\RoutingHandler');
-$adr->middle('Radar\Adr\Handler\ActionHandler');
-$adr->middle('Radar\Adr\Handler\SendingHandler');
+
+...
 
 $adr->get(...);
 $adr->post(...);
@@ -52,7 +51,7 @@ $adr->delete(...);
 _My\Config_ class might be saved in `src/My/Config.php`; note the use of
 `$di->get()` to retrieve the `$adr` service.
 
-```
+```php
 namespace My;
 
 use Aura\Di\Container;
@@ -79,14 +78,12 @@ class Config extends ContainerConfig
 ```
 
 Then you can replace the setup logic from `web/index.php` by specifying a
-config file in the `$boot()` params:
+Config file in the `Boot()` params:
 
 ```php
 $boot = new Boot();
-$adr = $boot([
+$adr = $boot->adr([
     'Foo\Bar\ContainerConfig',
-    'Baz\Dib\_Config',
-    'Some\Other\ConfigClass',
     'My\Config',
 ]);
 ```
