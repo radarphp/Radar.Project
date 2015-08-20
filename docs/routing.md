@@ -23,7 +23,7 @@ The Radar routing sysyem is based on
 [Aura.Router](https://github.com/auraphp/Aura.Router), with some details
 modified specifically for Radar.
 
-In other frameworks, a route points to an incoming request to a particular
+In other frameworks, a route points an incoming request to a particular
 controller class and action method. In Radar, every action is identical, in the
 sense that it receives input, invokes a domain element, and passes the domain
 output to a responder. This means that a Radar route does not point to an action
