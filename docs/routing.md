@@ -19,7 +19,7 @@ That will prepare your project for real use.
 
 ## Adding A Route
 
-The Radar routing sysyem is based on
+The Radar routing system is based on
 [Aura.Router](https://github.com/auraphp/Aura.Router), with some details
 modified specifically for Radar.
 
