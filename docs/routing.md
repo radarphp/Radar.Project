@@ -126,8 +126,10 @@ build your own _Responder_ classes, and then specify them as the responder calla
 for one or more of your routes. To
 do so, call `responder()` on the route, and pass the responder class name:
 
+```php
 $adr->patch('Todo\EditItem', '/todo/{id}', 'Domain\Todo\ApplicationService\EditItem')
     ->responder('MyTodoResponder');
+```
 
 
 If you want to set your own default responder class instead of the Radar one,
