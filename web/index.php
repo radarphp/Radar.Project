@@ -33,7 +33,7 @@ $adr->middle('Radar\Adr\Handler\ActionHandler');
 $adr->get('Hello', '/{name}?', function (array $input) {
         $payload = new Aura\Payload\Payload();
         return $payload
-            ->setStatus($payload::SUCCESS)
+            ->setStatus(Aura\Payload_Interface\PayloadStatus::SUCCESS)
             ->setOutput([
                 'phrase' => 'Hello ' . $input['name']
             ]);
