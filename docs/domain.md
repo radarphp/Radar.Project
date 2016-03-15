@@ -101,6 +101,7 @@ interfaces.
 namespace Domain\Todo\ApplicationService;
 
 use Aura\Payload\Payload;
+use Aura\Payload_Interface\PayloadStatus;
 use Exception;
 use Todo\User;
 use Todo\Mapper;
@@ -121,12 +122,12 @@ class EditItem
     {
         if (! $this->user->isAuthenticated()) {
             return $this->payload
-                ->setStatus(Payload::NOT_AUTHENTICATED);
+                ->setStatus(PayloadStatus::NOT_AUTHENTICATED);
         }
 
         if (empty($input['id'])) {
             return $this->payload
-                ->setStatus(Payload::NOT_VALID)
+                ->setStatus(PayloadStatus::NOT_VALID)
                 ->setInput($input)
                 ->setMessages([
                     'id' => 'Todo ID not set.'
@@ -136,13 +137,13 @@ class EditItem
         $todo = $this->mapper->fetchById($input['id']);
         if (! $todo) {
             return $this->payload
-                ->setStatus(Payload::NOT_FOUND)
+                ->setStatus(PayloadStatus::NOT_FOUND)
                 ->setInput($input);
         }
 
         if ($this->user->userId !== $todo->userId) {
             return $this->payload
-                ->setStatus(Payload::NOT_AUTHORIZED)
+                ->setStatus(PayloadStatus::NOT_AUTHORIZED)
                 ->setInput($input);
         }
 
@@ -150,11 +151,11 @@ class EditItem
             $todo->description = $input['description'];
             $this->mapper->update($todo);
             return $this->payload
-                ->setStatus(Payload::UPDATED)
+                ->setStatus(PayloadStatus::UPDATED)
                 ->setOutput($todo);
         } catch (Exception $e) {
             return $this->payload
-                ->setStatus(Payload::ERROR)
+                ->setStatus(PayloadStatus::ERROR)
                 ->setInput($input)
                 ->setOutput($e);
         }
