@@ -19,6 +19,5 @@
         "post-create-project-cmd" : [
             "php --run \"touch('.env');\""
         ]
-    },
-    "minimum-stability": "dev"
+    }
 }
