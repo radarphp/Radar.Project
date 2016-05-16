@@ -8,8 +8,3 @@ The `web/index.php` file uses the [josegonzalez/dotenv](https://github.com/joseg
 
 Alternatively, if you have another loader you prefer to use, or none at all,
 modify `web/index.php` and `composer.json` as you see fit.
-
-### Navigation
-
-* Continue to [Container Configuration](/docs/container.md)
-* Back to [Middleware](/docs/middleware.md)

@@ -126,8 +126,3 @@ If you want to define a specific namespace for your project, modify
     },
 
 ... then regenerate the Composer autoloader by calling `composer dump-autoload`.
-
-### Navigation
-
-* Continue to [Domain Design](/docs/domain.md)
-* Back to [the Index](/docs/index.md)

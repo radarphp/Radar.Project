@@ -87,8 +87,3 @@ $adr = $boot->adr([
     'My\Config',
 ]);
 ```
-
-### Navigation
-
-* Continue to [Execution Path](/docs/execution.md)
-* Back to [Environment Variables](/docs/environment.md)

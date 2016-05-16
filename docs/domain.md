@@ -170,8 +170,3 @@ be wiser to create it as a separate package, and import it via Composer. This
 will help to enforce the separation between the core application and the Radar
 user-interface wrapper around it, along with test suites independent from the
 Radar project.
-
-### Navigation
-
-* Continue to [Routing](/docs/routing.md)
-* Back to [Introduction](/docs/intro.md)

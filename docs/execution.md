@@ -37,8 +37,3 @@ The initial `web/index.php` installation queues four middleware decorators:
     _Responder_ then builds the outgoing HTTP _Response_ message.
 
 You can prepend, append, or replace these handlers in `web/index.php` with your own middleware.
-
-### Navigation
-
-* Back to [Container Configuration](/docs/container.md)
-* Up to [Index](/docs/index.md)
