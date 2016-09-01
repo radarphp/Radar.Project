@@ -157,6 +157,16 @@ For example, given a route named `Todo\EditItem`, you could create a
 exist, the route will use them automatically. Of course, you can still manually
 specify an `input()` and `responder()` value, and those will be used instead.
 
+> N.b. If you specified a default responder class by calling `$adr->responder()` directly 
+> (as described in the previous section above) it will only be called _after_ an attempt at 
+> automatic Responder discovery is done.  
+> So even if you did _not_ specify an explicit Responder to use via a route call such as 
+> `$adr->patch($name, $path, $action)->responder('MyTodoResponder');`
+> the default responder will _not_ be called if the discovery code can find a class to 
+> invoke using the route name.
+
+
+
 ## Other Route Specifications
 
 The `$adr` object acts as a proxy for the underlying _Aura\Router\Map_ instance,
