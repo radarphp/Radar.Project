@@ -31,6 +31,7 @@ file_put_contents(
     implode(PHP_EOL, [
         '/.env',
         '/vendor',
+        '',
     ])
 );
 echo "- Initialized .gitignore" . PHP_EOL;
@@ -53,4 +54,4 @@ echo "- Cleaned composer.json" . PHP_EOL;
 
 // Remove post install command
 unlink('post-create-project.php');
-echo "-  Removed post-create-project.php command\n";
+echo "- Removed post-create-project.php command\n";
