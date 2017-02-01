@@ -11,7 +11,7 @@ You will need [Composer](https://getcomposer.org) to install Radar.
 Pick a project name, and use Composer to create it with Radar; here we create
 one called `example-project`:
 
-    composer create-project -s dev radar/project example-project
+    composer create-project radar/project example-project
 
 Confirm the installation by changing into the project directory and starting the
 built-in PHP web server:
