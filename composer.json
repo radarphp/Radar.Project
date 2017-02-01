@@ -20,7 +20,7 @@
     },
     "scripts": {
         "post-create-project-cmd" : [
-            "php post.php"
+            "php post-create-project.php"
         ]
     }
 }

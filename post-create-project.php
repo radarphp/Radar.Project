@@ -4,7 +4,7 @@
 
 // Create env file
 touch('.env');
-echo "- Created .env\n";
+echo "- Created .env" . PHP_EOL;
 
 // Remove Radar meta
 array_map(
@@ -12,26 +12,28 @@ array_map(
     [
         'CONTRIBUTING.md',
         'LICENSE',
-        'CHANGES.md',
+        'CHANGELOG.md',
         'README.md',
         'src/.placeholder'
     ]
 );
-echo "- Removed Radar meta\n";
-
+echo "- Removed Radar meta" . PHP_EOL;
 
 // Remove Radar docs
 array_map('unlink', glob('docs/*'));
 rmdir('docs');
-echo "- Removed Radar docs\n";
+echo "- Removed Radar docs" . PHP_EOL;
 
 // Keep composer.lock for projects
 // http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
 file_put_contents(
     '.gitignore',
-    '/.env' . PHP_EOL . '/vendor' . PHP_EOL
+    implode(PHP_EOL, [
+        '/.env',
+        '/vendor',
+    ])
 );
-echo "- Initializeid .gitignore\n";
+echo "- Initialized .gitignore" . PHP_EOL;
 
 // Cleanup composer.json
 $composerJson = json_decode(file_get_contents('composer.json'), true);
@@ -40,7 +42,6 @@ unset(
     $composerJson['name'],
     $composerJson['description'],
     $composerJson['license'],
-    $composerJson['license'],
     $composerJson['scripts']
 );
 
@@ -48,10 +49,8 @@ file_put_contents(
     'composer.json',
     json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
 );
-echo "-  Cleaned composer.json\n";
-
+echo "- Cleaned composer.json" . PHP_EOL;
 
 // Remove post install command
-unlink('post.php');
-echo "-  Removed post.php command\n";
-
+unlink('post-create-project.php');
+echo "-  Removed post-create-project.php command\n";
