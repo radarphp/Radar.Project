@@ -17,7 +17,7 @@ Confirm the installation by changing into the project directory and starting the
 built-in PHP web server:
 
     cd example-project
-    php -S localhost:8080 -t web/
+    php -S localhost:8080 -t public/
 
 You can then browse to <http://localhost:8080/> and see JSON output:
 
