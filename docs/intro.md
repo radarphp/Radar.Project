@@ -75,7 +75,7 @@ Confirm the installation by changing into the project directory and starting the
 built-in PHP web server:
 
     cd example-project
-    php -S localhost:8080 -t web/
+    php -S localhost:8080 -t public/
 
 You can then browse to <http://localhost:8080/> and see JSON output:
 
@@ -100,11 +100,11 @@ A Radar project looks like this:
     │   ├── ...
     │   ├── ...
     │   └── ...
-    └── web/            # Web document root
+    └── public/         # Web document root
         └── index.php   # Bootstrap script
 
 
-Of note, the `web/index.php` file is where you will:
+Of note, the `public/index.php` file is where you will:
 
 - Boostrap the Radar `$adr` instance
 - Define routes

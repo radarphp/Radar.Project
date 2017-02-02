@@ -14,7 +14,7 @@ Sending handlers), etc.
 
 - The run phase, which executes all middleware callables in turn.
 
-The initial `web/index.php` installation queues four middleware decorators:
+The initial `public/index.php` installation queues four middleware decorators:
 
 - _Relay\Middleware\SendingHandler_ to pass along the inbound request without
   modification, and send back the outbound response after all other middlware
@@ -36,4 +36,4 @@ The initial `web/index.php` installation queues four middleware decorators:
     - A _Responder_ callable is invoked with the _Domain_ output; the
     _Responder_ then builds the outgoing HTTP _Response_ message.
 
-You can prepend, append, or replace these handlers in `web/index.php` with your own middleware.
+You can prepend, append, or replace these handlers in `public/index.php` with your own middleware.

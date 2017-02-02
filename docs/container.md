@@ -12,7 +12,7 @@ You can learn about container configuration classes
 
 To tell the boot process which container configuration (aka "provider") classes
 to load, and in which order, pass an array of config class names to the `Boot()`
-call in `web/index.php`. This array will automatically be merged with the default Config that comes with ADR.
+call in `public/index.php`. This array will automatically be merged with the default Config that comes with ADR.
 
 ```php
 $boot = new Boot();
@@ -30,10 +30,10 @@ own configuration class, be sure to include that class name in the list.
 
 ## Extracting Setup To Configuration
 
-If you like, you can greatly reduce the size of your `web/index.php` file by
+If you like, you can greatly reduce the size of your `public/index.php` file by
 moving all the middleware and route setup logic to a configuration class,
 and then specifying that class as part of the container configuration. For
-example, if your `web/index.php` has this setup logic ...
+example, if your `public/index.php` has this setup logic ...
 
 ```php
 $adr->middle('Radar\Adr\Handler\ExceptionHandler');
@@ -77,7 +77,7 @@ class Config extends ContainerConfig
 }
 ```
 
-Then you can replace the setup logic from `web/index.php` by specifying a
+Then you can replace the setup logic from `public/index.php` by specifying a
 Config file in the `Boot()` params:
 
 ```php

@@ -1,6 +1,6 @@
 # Routing
 
-Before continuing, remove the default `Hello` route from the `web/index.php`
+Before continuing, remove the default `Hello` route from the `public/index.php`
 file. It looks like this:
 
 ```php
@@ -30,7 +30,7 @@ output to a responder. This means that a Radar route does not point to an action
 per se, but to a trio of action-related elements: an input handler, a domain
 element, and a responder.
 
-Let's add an HTTP PATCH route. In `web/index.php`, call `$adr->patch()` with a
+Let's add an HTTP PATCH route. In `public/index.php`, call `$adr->patch()` with a
 route name and URL path, and a _Domain_ specification.
 
 ```php

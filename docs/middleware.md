@@ -4,7 +4,7 @@ Radar uses the [Relay](http://relayphp.com) system for dispatching middleware.
 You can read more about middleware there.
 
 To add Relay-compatible middleware entries to the queue, call the
-`$adr->middle()` method in `web/index.php`. Pass a class name as the only
+`$adr->middle()` method in `public/index.php`. Pass a class name as the only
 parameter to the method. The underlying dependency injection container will
 create an instance of that class so that Relay can call its `__invoke()` method.
 
