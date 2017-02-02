@@ -89,7 +89,7 @@ anything from a plain-old database connection to a formal DDD approach. As long
 as the _ApplicationService_ returns a _Payload_, the internals of the
 _ApplicationService_ and its interactions do not matter to Radar.
 
-Here is a naive bit of logic for a _Fetch_ service in our todo application. It
+Here is a naive bit of logic for an _Edit_ service in our todo application. It
 guards against several error conditions (anonymous user, invalid input, user
 attempting to edit a todo item they do not own, and database update failures).
 It returns a _Payload_ that describes exactly what happened inside the
