@@ -52,7 +52,7 @@ to re-establish itself.
 This may seem onerous, but remember: **Radar is an HTTP-specific user interface
 wrapper** around your core application. Anything that relates to authentication,
 authorization, database, disk, and so on are more properly part of your domain
-work, *not* the user- interface work related to the input and output related to
+work, *not* the user-interface work related to the input and output related to
 that domain. All the data you need to work with the domain should come from the
 incoming request, and all the data you need to build a response should emit from
 the domain as a _Payload_.
