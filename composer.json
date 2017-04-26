@@ -7,7 +7,7 @@
         "php": ">=5.5.0",
         "radar/adr": "~1.0",
         "relay/middleware": "~1.0",
-        "josegonzalez/dotenv": "~1.0",
+        "josegonzalez/dotenv": "~2.0",
         "zendframework/zend-diactoros": "~1.0"
     },
     "require-dev": {
