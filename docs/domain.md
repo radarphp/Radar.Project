@@ -28,6 +28,9 @@ _Domain_ as a whole, is independent from any particular user interface system.
 Each _ApplicationService_ should be as narrowly-purposed as possible, handling
 either a single activity, or a limited set of related activities.
 
+For more information on designing your _Domain_, _Action_ and _Responder_ layers,
+this [discussion](https://github.com/pmjones/adr/blob/master/IMPLEMENTATION.md) should be helpful.
+
 ## Class Structure
 
 In a todo system, for example, there might be a single _TodoApplicationService_
