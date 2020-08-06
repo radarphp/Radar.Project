@@ -4,11 +4,11 @@
     "description": "An Action-Domain-Responder project skeleton.",
     "license": "MIT",
     "require": {
-        "php": ">=5.5.0",
-        "radar/adr": "~1.0",
+        "php": ">=7.4",
+        "radar/adr": "~2",
         "relay/middleware": "~1.0",
         "josegonzalez/dotenv": "~2.0",
-        "zendframework/zend-diactoros": "~1.0"
+        "laminas/laminas-diactoros": "~2.2"
     },
     "require-dev": {
         "pds/skeleton": "~1.0"
